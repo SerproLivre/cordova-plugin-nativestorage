@@ -19,7 +19,7 @@ howpublished = {\url{https://github.com/TheCocoaProject/cordova-plugin-nativesto
 }
 ```
 
-You can also provide a `version` field to include a version number e.g., `version = {2.3.1}`.
+You can also provide a `version` field to include a version number e.g., `version = {2.3.3}`.
 
 ***
 

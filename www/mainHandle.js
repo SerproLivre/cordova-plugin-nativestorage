@@ -22,6 +22,18 @@ function storageSupportAnalyse() {
   }
 }
 
+function hasJsonStructure(str) {
+  if (typeof str !== 'string') return false;
+  try {
+      const result = JSON.parse(str);
+      const type = Object.prototype.toString.call(result);
+      return type === '[object Object]' 
+          || type === '[object Array]';
+  } catch (err) {
+      return false;
+  }
+}
+
 //if storage not available gracefully fails, no error message for now
 function StorageHandle() {
   this.storageSupport = storageSupportAnalyse();
@@ -396,10 +408,18 @@ StorageHandle.prototype.getItem = function(reference, success, error) {
   this.storageHandlerDelegate(
     function(data) {
       try {
-        obj = JSON.parse(data);
+        if (hasJsonStructure(data)) {
+          obj = JSON.parse(data);
+        } else {
+          obj = data;
+        }       
         success(obj);
       } catch (err) {
-        error(new NativeStorageError(NativeStorageError.JSON_ERROR, "JS", err));
+        if (data) {
+          success(data);
+        } else {
+          error(new NativeStorageError(NativeStorageError.JSON_ERROR, "JS", err));
+        }
       }
     },
     function(code) {
